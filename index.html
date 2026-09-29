@@ -1,157 +1,106 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>Paper.io 3D</title>
-  <style>
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-      background: #111615;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+<html>
+  <!-- Ultimate Game Stash file-->
+  <!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->
 
-    #gameFrame {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #111615;
-    }
+  <head>
+    <script src="//www.google.com/jsapi"></script>
+    <script>
+      window.parent.maeExportApis_();
+    </script>
 
-    #loader {
-      position: fixed;
-      inset: 0;
-      z-index: 2;
-      display: grid;
-      place-items: center;
-      background: #111615;
-      color: #fff;
-      transition: opacity 180ms ease, visibility 180ms ease;
-    }
+    <style>
+      body {
+        overflow: hidden;
+        background: #000000;
+        margin-top: 0;
+        margin-left: 0;
+        color: #000000;
+      }
 
-    #loader.hidden {
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
-    }
+      #startButton {
+        display: block;
+        width: 160px;
+        height: 40px;
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        margin: 20px auto;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: "Press Start 2P", cursive;
+        box-shadow: 0px 0px 10px 2px #000000;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style type="text/css">
+      #button {
+        display: none;
+      }
 
-    .panel {
-      display: grid;
-      gap: 18px;
-      justify-items: center;
-      width: min(320px, calc(100vw - 40px));
-      text-align: center;
-    }
+      .imgb_vis {
+        animation: imgb-animation 7s linear;
+      }
 
-    .logo {
-      font-size: 32px;
-      font-weight: 800;
-      line-height: 1.1;
-    }
+      @keyframes imgb-animation {
+        10% {
+          transform: translateX(0);
+        }
 
-    .spinner {
-      width: 46px;
-      height: 46px;
-      border: 5px solid rgba(255, 255, 255, 0.22);
-      border-top-color: #4fe56d;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
+        20% {
+          transform: translateX(100px);
+        }
 
-    .status {
-      min-height: 20px;
-      color: rgba(255, 255, 255, 0.78);
-      font-size: 14px;
-    }
+        90% {
+          transform: translateX(100px);
+        }
 
-    .actions {
-      display: none;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+        100% {
+          transform: translateX(0);
+        }
+      }
+    </style>
+  </head>
 
-    button {
-      min-height: 42px;
-      padding: 0 16px;
-      border: 0;
-      border-radius: 6px;
-      background: #4fe56d;
-      color: #07130a;
-      font: 700 14px Arial, Helvetica, sans-serif;
-      cursor: pointer;
-    }
-
-    button.secondary {
-      background: rgba(255, 255, 255, 0.16);
-      color: #fff;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  </style>
-</head>
-<body>
-  <iframe
-    id="gameFrame"
-    title="Paper.io 3D"
-    src="https://paperio.site/3d/"
-    allow="autoplay; fullscreen; gamepad; pointer-lock"
-    allowfullscreen>
-  </iframe>
-
-  <div id="loader" aria-live="polite">
-    <div class="panel">
-      <div class="logo">Paper.io 3D</div>
-      <div class="spinner" aria-hidden="true"></div>
-      <div id="status" class="status">Fixed by @ThatGuy On discord</div>
-      <div id="actions" class="actions">
-        <button id="openGame" type="button">Open Game</button>
-        <button id="reloadGame" class="secondary" type="button">Reload</button>
-      </div>
+  <body>
+    <div style="width: 100vw; height: 100vh; max-width: 100%">
+      <div id="game" style="display: none"></div>
+      <button id="startButton">PLAY</button>
     </div>
-  </div>
-
-  <script>
-    (function () {
-      var frame = document.getElementById("gameFrame");
-      var loader = document.getElementById("loader");
-      var status = document.getElementById("status");
-      var actions = document.getElementById("actions");
-      var openGame = document.getElementById("openGame");
-      var reloadGame = document.getElementById("reloadGame");
-      var gameUrl = "https://paperio.site/3d/";
-
-      var fallbackTimer = window.setTimeout(function () {
-        status.textContent = "Fixed by @ThatGuy On discord";
-        actions.style.display = "flex";
-      }, 8000);
-
-      frame.addEventListener("load", function () {
-        window.clearTimeout(fallbackTimer);
-        window.setTimeout(function () {
-          loader.classList.add("hidden");
-        }, 700);
-      });
-
-      openGame.addEventListener("click", function () {
-        window.location.href = gameUrl;
-      });
-
-      reloadGame.addEventListener("click", function () {
-        actions.style.display = "none";
-        status.textContent = "Fixed by @ThatGuy On discord";
-        frame.src = gameUrl + "?reload=" + Date.now();
-      });
-    }());
-  </script>
-</body>
+    <script>
+      document.getElementById("game").style.display = "none";
+      function startGame() {
+        document.getElementById("game").style.display = "block";
+        document.getElementById("startButton").style.display = "none";
+        EJS_player = "#game";
+        EJS_core = "segaMD";
+        EJS_color = "#000000";
+        EJS_startOnLoaded = true;
+        EJS_pathtodata = "https://cdn.jsdelivr.net/gh/bubblfan/emu@master/";
+        EJS_gameUrl =
+          "https://cdn.jsdelivr.net/gh/bubbls/UGS-file-encryption@0a6f3ffbd464571d45199289630a3596db355934/Ultimate%20Mortal%20Kombat%203%20(USA).zip";
+        loadGame();
+      }
+      document
+        .getElementById("startButton")
+        .addEventListener("click", startGame);
+      function loadGame() {
+        var script = document.createElement("script");
+        script.src =
+          "https://cdn.jsdelivr.net/gh/bubblfan/emu@master/loader.js";
+        document.body.appendChild(script);
+        var script = document.createElement("script");
+        script.src =
+          "https://cdn.jsdelivr.net/gh/a456pur/seraph@ae2fcc6d6a9cd051654fcc0519080db1f79cf2a7/storage/js/cloak.js";
+        document.body.appendChild(script);
+      }
+    </script>
+  </body>
 </html>
-Displaying clpaperio3d.html.
+Displaying clultimatemortalkombat3.html.
